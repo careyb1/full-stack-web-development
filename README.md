@@ -1,2 +1,2 @@
 # full-stack-web-development
-This is the repository used for submitting the exercises for the Full Stack Web Development course.
+This is the repository used for submitting exercises for University of Helsinki's Full Stack Web Development course.

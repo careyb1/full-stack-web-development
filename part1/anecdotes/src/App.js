@@ -4,6 +4,20 @@ const Button = ({name,eventHandler}) => <button onClick={eventHandler}>{name}</b
 
 const Votes = ({votes}) => <p>has {votes} votes</p>
 
+const TopVotes = ({anecdotes,votes}) => {
+
+  const topVote = Math.max(...votes)
+  const topVoteIndex = votes.indexOf(topVote)
+
+  return(
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[topVoteIndex]}</p>
+      <Votes votes={topVote}/>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -33,10 +47,12 @@ const App = () => {
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <Votes votes={points[selected]}/>
       <Button name='vote' eventHandler={makeVote}/>
       <Button name='next anecdote' eventHandler={getRandomIndex}/>
+      <TopVotes anecdotes={anecdotes} votes={points}/>
     </div>
   )
 }

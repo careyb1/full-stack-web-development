@@ -12,14 +12,6 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   
   const [searchString, setSearchString] = useState('')
-  const handleSearchStringChange = (event) => {
-    if(event.target.value === ''){
-      setShowAll(true)
-    } else {
-      setShowAll(false)
-    }
-    setSearchString(event.target.value)
-  }
 
   const personsToShow = showAll
     ? persons
@@ -28,7 +20,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-        <div>filter shown with<input value={searchString} onChange={handleSearchStringChange}/></div>
+      <Filter 
+        searchString={searchString}
+        setShowAll={setShowAll}
+        setSearchString={setSearchString}
+      />
+        
       <h3>add a new</h3>
 
       <PersonForm
@@ -38,6 +35,25 @@ const App = () => {
       <h3>Numbers</h3>
 
       <Persons persons={personsToShow}/>
+    </div>
+  )
+}
+
+const Filter = ({searchString, setShowAll, setSearchString}) => {
+  
+  const handleSearchStringChange = (event) => {
+    if(event.target.value === ''){
+      setShowAll(true)
+    } else {
+      setShowAll(false)
+    }
+    setSearchString(event.target.value)
+  }
+
+  return(
+    <div>
+      filter shown with
+      <input value={searchString} onChange={handleSearchStringChange}/>
     </div>
   )
 }

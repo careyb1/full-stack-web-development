@@ -2,6 +2,7 @@ import { useState} from 'react'
 import Display from './components/Display'
 
 const App = ({countries}) => {
+
   const [searchString, setSearchString] = useState('')
   const handleSearchStringChange = (event) => {
     setShowCountry('')
@@ -25,9 +26,6 @@ const App = ({countries}) => {
 }
 
 const Filter = ({searchString, handleSearchStringChange}) => {
-  //const handleSearchStringChange = (event) => {
-  //  setSearchString(event.target.value)
-  //}
   return(
     <div>
       find countries
@@ -35,29 +33,5 @@ const Filter = ({searchString, handleSearchStringChange}) => {
     </div>
   )
 }
-
-//const App = ({countries}) => {
-//  const [searchString, setSearchString] = useState('')
-//
-//  const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchString.toLowerCase()))
-//  return(
-//    <div>
-//      <Filter searchString={searchString} setSearchString={setSearchString}/>
-//      <Display countries={filteredCountries}/>
-//    </div>
-//  )
-//}
-//
-//const Filter = ({searchString, setSearchString}) => {
-//  const handleSearchStringChange = (event) => {
-//    setSearchString(event.target.value)
-//  }
-//  return(
-//    <div>
-//      find countries
-//      <input value={searchString} onChange={handleSearchStringChange}/>
-//    </div>
-//  )
-//}
 
 export default App

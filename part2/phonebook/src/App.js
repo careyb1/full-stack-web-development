@@ -14,6 +14,18 @@ const App = () => {
       })
   }, [])  
 
+  const removePerson = id => {
+    const personRemoved = persons.find(n => n.id === id)
+    if(window.confirm(`Delete ${personRemoved.name}?`)){
+      console.log(`removing ${personRemoved.name}`);
+      personService
+      .remove(personRemoved.id)
+      .then(() => {
+        setPersons(persons.filter(person => person !== personRemoved))
+      })
+    }
+  }
+
   const personsToShow = showAll
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -35,7 +47,7 @@ const App = () => {
       />
       <h3>Numbers</h3>
 
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow} removePerson={removePerson}/>
     </div>
   )
 }
@@ -96,16 +108,24 @@ const PersonForm = ({persons, setPersons}) => {
   )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, removePerson}) => {
   return(
     <div>
       {persons.map(person => 
-        <Person key={person.id} person={person}/>
+        <Person key={person.id} person={person} removePerson={() => removePerson(person.id)}/>
       )}
   </div>
   )
 }
 
-const Person = ({person}) => <p>{person.name} {person.number}</p>
+const Person = ({person, removePerson}) => {
+  return(
+    <div>
+      <p>
+          {person.name}  {person.number}  <button onClick={removePerson}>delete</button>
+      </p>
+    </div>
+  )
+}
 
 export default App

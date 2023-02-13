@@ -85,9 +85,16 @@ const PersonForm = ({persons, setPersons}) => {
       name: newName,
       number: newNumber,
     }
-
-    if (persons.find((person) => person.name === personObject.name)){
-      window.alert(`${personObject.name} is already added to phonebook`);
+    const personExists = persons.find((person) => person.name === personObject.name)
+    if (personExists){
+      if(window.confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)){
+        const changedPerson = {...personExists, number: personObject.number}
+        personService
+          .update(changedPerson.id, changedPerson)
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id !== updatedPerson.id ? person : updatedPerson))
+          })
+      }
     } else {
       personService
         .add(personObject)

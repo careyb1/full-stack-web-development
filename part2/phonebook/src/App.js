@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import personService from "./services/persons"
+import personService from './services/persons'
+import Notification from  './Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [searchString, setSearchString] = useState('')
+  const [notification, setNotification] = useState({type: null, message: null})
 
   useEffect(() => {
     personService
@@ -33,6 +35,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification type={notification.type} message={notification.message}/>
       <Filter 
         searchString={searchString}
         setShowAll={setShowAll}
@@ -44,6 +47,7 @@ const App = () => {
       <PersonForm
         persons={persons}
         setPersons={setPersons}
+        setNotification={setNotification}
       />
       <h3>Numbers</h3>
 
@@ -71,7 +75,7 @@ const Filter = ({searchString, setShowAll, setSearchString}) => {
   )
 }
 
-const PersonForm = ({persons, setPersons}) => {
+const PersonForm = ({persons, setPersons, setNotification}) => {
 
   const [newName, setNewName] = useState('')
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -93,6 +97,12 @@ const PersonForm = ({persons, setPersons}) => {
           .update(changedPerson.id, changedPerson)
           .then(updatedPerson => {
             setPersons(persons.map(person => person.id !== updatedPerson.id ? person : updatedPerson))
+            setNotification({
+              type: `success`, 
+              message: `Changed ${changedPerson.name}'s number`})
+            setTimeout(() => {
+              setNotification({type: null, message: null})
+            }, 5000)
           })
       }
     } else {
@@ -102,6 +112,12 @@ const PersonForm = ({persons, setPersons}) => {
           setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNumber('')
+          setNotification({
+            type: `success`, 
+            message: `Added ${newPerson.name}`})
+          setTimeout(() => {
+            setNotification({type: null, message: null})
+          }, 5000)
         })
     }
   }

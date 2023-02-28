@@ -104,6 +104,14 @@ const PersonForm = ({persons, setPersons, setNotification}) => {
               setNotification({type: null, message: null})
             }, 5000)
           })
+          .catch(error => {
+            setNotification({
+              type: `failure`, 
+              message: `Information of ${changedPerson.name} has already been removed from server`})
+            setTimeout(() => {
+              setNotification({type: null, message: null})
+            }, 5000)
+          })
       }
     } else {
       personService

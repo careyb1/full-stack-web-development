@@ -1,8 +1,25 @@
-const { response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
+
+morgan.token('entry', request => {
+  if (request.entry){
+    return request.entry
+  }
+  return ' '
+} )
+
+const assignEntry = (req, res, next) => {
+  if (req.method === 'POST'){
+    req.entry = JSON.stringify(req.body)
+  }
+  next()
+}
+
 const app = express()
 
 app.use(express.json())
+app.use(assignEntry)
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :entry'))
 
 let persons = [
   { 
@@ -59,12 +76,10 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   persons = persons.filter(person => person.id !== id)
-
   response.status(204).end()
 })
 
 const generateId = max => Math.floor(Math.random() * max)
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -81,15 +96,19 @@ app.post('/api/persons', (request, response) => {
   }
 
   const person = {
+    id: generateId(1000),
     name: body.name,
     number: body.number,
-    id: generateId(1000),
   }
 
   persons = persons.concat(person)
-
   response.json(person)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
